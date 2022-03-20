@@ -1,0 +1,22 @@
+{
+  "fusion_complete": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "fusion_complete",
+        "stream": true
+      }
+    ]
+  },
+  
+  "fusion_rotation": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "fusion_rotation",
+        "stream": true
+      }
+    ]
+  }
+}
+

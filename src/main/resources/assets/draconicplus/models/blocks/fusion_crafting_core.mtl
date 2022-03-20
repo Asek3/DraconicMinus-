@@ -1,0 +1,4 @@
+# Made in Blockbench 4.0.1
+newmtl m_texture
+map_Kd crafting_core.png 
+newmtl none

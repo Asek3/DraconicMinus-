@@ -1,0 +1,22 @@
+itemGroup.draconicplus=DraconicMinus-
+
+//Fusion Crafting
+tile.draconicplus:fusionCraftingCore.name=Ядро слияния
+tile.draconicplus:craftingInjector0.name=Базовый инжектор слияния
+tile.draconicplus:craftingInjector1.name=Инжектор слияния Виверны
+tile.draconicplus:craftingInjector2.name=Инжектор слияния Дракона
+tile.draconicplus:craftingInjector3.name=Инжектор слияния Хаоса
+
+gui.de.fusionCraftingCore.name=Слияние
+gui.de.button.start=Старт
+gui.fusionCrafting.charging.info=Зарядка
+gui.fusionCrafting.crafting.info=Создание
+gui.fusionCrafting.outputObstructed.info=Выходной слот занят
+gui.fusionCrafting.tierLow.info=Уровень инжектора/ов мал
+info.energyCost.txt=Затраты энергии
+info.tier.txt=Уровень
+info.tier0.txt=Базовый
+info.tier1.txt=Виверна
+info.tier2.txt=Дракон
+info.tier3.txt=Хаос
+crafting.fusioncrafting=Слияние
