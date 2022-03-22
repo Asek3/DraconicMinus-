@@ -3,6 +3,7 @@ package ru.nanolive.draconicplus.common.fusioncrafting.network;
 import java.io.IOException;
 
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
@@ -67,6 +68,7 @@ public class PacketSpawnParticle extends AbstractMessage.AbstractClientMessage<P
 	        }
 	  }
 	  
+	  @SideOnly(Side.CLIENT)
 	  protected void process(EntityPlayer player, Side side) {
 		if(side.isClient())
 		  DPEffectHandler.spawnFX(this.particleID, Minecraft.getMinecraft().theWorld, this.xCoord, this.yCoord, this.zCoord, this.xSpeed, this.ySpeed, this.zSpeed, this.viewRange, this.args);  

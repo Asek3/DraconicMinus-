@@ -2,8 +2,10 @@ package ru.nanolive.draconicplus.proxy;
 
 import org.lwjgl.opengl.GL11;
 
+import codechicken.nei.api.API;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.client.Minecraft;
@@ -23,6 +25,7 @@ import ru.nanolive.draconicplus.common.fusioncrafting.client.render.tile.RenderI
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.tile.RenderItemFusionCraftingCore;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.tile.RenderTileCraftingInjector;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.tile.RenderTileFusionCraftingCore;
+import ru.nanolive.draconicplus.common.fusioncrafting.nei.FusionCraftingNEI;
 import ru.nanolive.draconicplus.common.fusioncrafting.tiles.TileCraftingInjector;
 import ru.nanolive.draconicplus.common.fusioncrafting.tiles.TileFusionCraftingCore;
 
@@ -42,6 +45,15 @@ public class ClientProxy extends CommonProxy {
         registerRendering();
         FMLCommonHandler.instance().bus().register(this);
         MinecraftForge.EVENT_BUS.register(this);
+        
+    	if(event.getSide().isClient()) {
+	    	if(Loader.isModLoaded("NotEnoughItems")) {
+	    		FusionCraftingNEI nei = new FusionCraftingNEI();
+	    		API.registerRecipeHandler(nei);
+	    		API.registerUsageHandler(nei);
+	    		}
+    	}
+        
     }
 	
     @Override

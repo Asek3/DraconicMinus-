@@ -66,13 +66,6 @@ public class DraconicPlus
     	proxy.postInit(event);
     	if(Loader.isModLoaded("MineTweaker3"))
     		MineTweakerAPI.registerClass(FusionCrafting.class);
-    	if(event.getSide().isClient()) {
-    	if(Loader.isModLoaded("NotEnoughItems")) {
-    		FusionCraftingNEI nei = new FusionCraftingNEI();
-    		API.registerRecipeHandler(nei);
-    		API.registerUsageHandler(nei);
-    		}
-    	}
     }
     
 }
