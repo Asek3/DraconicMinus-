@@ -30,7 +30,6 @@ import ru.nanolive.draconicplus.common.fusioncrafting.IFusionCraftingInventory;
 import ru.nanolive.draconicplus.common.fusioncrafting.IFusionRecipe;
 import ru.nanolive.draconicplus.common.fusioncrafting.RecipeManager;
 import ru.nanolive.draconicplus.common.fusioncrafting.Vec3D;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.GlStateManager;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.ResourceHelperDP;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.effect.DPEffectHandler;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.effect.EffectTrackerFusionCrafting;
@@ -495,20 +494,20 @@ public class TileFusionCraftingCore extends TileInventoryBase implements IFusion
             Tessellator tessellator = Tessellator.instance;
 
             //Pre-Render
-            GlStateManager.enableBlend();
-            GlStateManager.disableLighting();
-            GlStateManager.depthMask(true);
-            GlStateManager.alphaFunc(GL11.GL_GREATER, 0F);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glDepthMask(true);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0F);
 
             for (EffectTrackerFusionCrafting effect : effects) {
                 effect.renderEffect(tessellator, partialTicks);
             }
 
             //Post-Render
-            GlStateManager.disableBlend();
-            GlStateManager.enableLighting();
-            GlStateManager.depthMask(true);
-            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glDepthMask(true);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
         }
     }
 

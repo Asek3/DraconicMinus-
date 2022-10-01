@@ -15,9 +15,7 @@ import net.minecraft.world.World;
 import ru.nanolive.draconicplus.client.particles.DPParticle;
 import ru.nanolive.draconicplus.common.fusioncrafting.IFusionCraftingInventory;
 import ru.nanolive.draconicplus.common.fusioncrafting.Vec3D;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.GlStateManager;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.ResourceHelperDP;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.VertexBuffer;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.effect.EffectTrackerFusionCrafting.SubParticle;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.vertex.DefaultVertexFormats;
 import ru.nanolive.draconicplus.common.fusioncrafting.utils.Utils;
@@ -150,8 +148,8 @@ public class ParticleFusionCrafting extends DPParticle {
     
     @Override
     public void renderParticle(Tessellator tessellator, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-    	VertexBuffer vertexbuffer = tessellator.getBuffer(tessellator);
-        CCRenderState ccrs = instance();
+    	tessellator.draw();
+    	CCRenderState ccrs = instance();
         ccrs.startDrawing();
         ccrs.draw(); //End Draw
         //region Icosahedron
@@ -163,15 +161,15 @@ public class ParticleFusionCrafting extends DPParticle {
         float correctY = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks);
         float correctZ = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.color(particleRed, particleGreen, particleBlue, particleAlpha);
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glColor4f(particleRed, particleGreen, particleBlue, particleAlpha);
        // GlStateManager.color(1, 0, 0, 1);
-        GlStateManager.translate(x, y + 0.5, z);
+        GL11.glTranslated(x, y + 0.5, z);
 
-        GlStateManager.rotate(rotation + (partialTicks * rotationSpeed), 0F, 1F, 0F);
+        GL11.glRotatef(rotation + (partialTicks * rotationSpeed), 0F, 1F, 0F);
         //GlStateManager.rotate((float)Math.sin((rotation + partialTicks) * rotationSpeed / 100F) * 20F, 1F, 0F, 0F);
-        GlStateManager.translate(-x, -y, -z);
+        GL11.glTranslatef(-x, -y, -z);
 
         ccrs.reset();
         ccrs.startDrawing(GL11.GL_QUADS);
@@ -179,13 +177,13 @@ public class ParticleFusionCrafting extends DPParticle {
         CCModelLibrary.icosahedron7.render(new IVertexOperation[] { (IVertexOperation)pearlMat });
         ccrs.draw();
 
-        GlStateManager.popMatrix();
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glPopMatrix();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
 
         //endregion
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, z);
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, z);
 
         if (renderBolt){
             renderBolt = false;
@@ -200,14 +198,14 @@ public class ParticleFusionCrafting extends DPParticle {
 //            RenderEnergyBolt.renderCorona(new Vec3D(), t, 0.01, 0.2, 4, worldObj.rand.nextLong());
 //        }
 
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.disableLighting();
-        GlStateManager.popMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glPopMatrix();
 
         //Restore Draw State
-        vertexbuffer.finishDrawing();
-        vertexbuffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+        //tessellator.draw();
+        tessellator.startDrawingQuads();
     }
 
     public class SubParticle extends DPParticle {
@@ -248,7 +246,6 @@ public class ParticleFusionCrafting extends DPParticle {
 
         @Override
         public void renderParticle(Tessellator tessellator, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        	VertexBuffer vertexbuffer = tessellator.getBuffer(tessellator);
             float minU = (float)this.particleTextureIndexX / 8.0F;
             float maxU = minU + 0.125F;
             float minV = (float)this.particleTextureIndexY / 8.0F;
@@ -261,10 +258,11 @@ public class ParticleFusionCrafting extends DPParticle {
             int brightnessForRender = this.getBrightnessForRender(partialTicks);
             int j = brightnessForRender >> 16 & 65535;
             int k = brightnessForRender & 65535;
-            vertexbuffer.pos((double)(renderX - rotationX * scale - rotationXY * scale), (double)(renderY - rotationZ * scale), (double)(renderZ - rotationYZ * scale - rotationXZ * scale)).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-            vertexbuffer.pos((double)(renderX - rotationX * scale + rotationXY * scale), (double)(renderY + rotationZ * scale), (double)(renderZ - rotationYZ * scale + rotationXZ * scale)).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-            vertexbuffer.pos((double)(renderX + rotationX * scale + rotationXY * scale), (double)(renderY + rotationZ * scale), (double)(renderZ + rotationYZ * scale + rotationXZ * scale)).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-            vertexbuffer.pos((double)(renderX + rotationX * scale - rotationXY * scale), (double)(renderY - rotationZ * scale), (double)(renderZ + rotationYZ * scale - rotationXZ * scale)).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+            tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+            tessellator.addVertexWithUV((renderX - rotationX * scale - rotationXY * scale), (renderY - rotationZ * scale), (renderZ - rotationYZ * scale - rotationXZ * scale), maxU, maxV);
+            tessellator.addVertexWithUV((renderX - rotationX * scale + rotationXY * scale), (renderY + rotationZ * scale), (renderZ - rotationYZ * scale + rotationXZ * scale), maxU, maxV);
+            tessellator.addVertexWithUV((renderX + rotationX * scale + rotationXY * scale), (renderY + rotationZ * scale), (renderZ + rotationYZ * scale + rotationXZ * scale), maxU, maxV);
+            tessellator.addVertexWithUV((renderX + rotationX * scale - rotationXY * scale), (renderY - rotationZ * scale), (renderZ + rotationYZ * scale - rotationXZ * scale), maxU, maxV);
         }
     }
 }

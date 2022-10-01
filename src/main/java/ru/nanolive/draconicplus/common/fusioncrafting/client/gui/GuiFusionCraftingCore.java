@@ -15,9 +15,7 @@ import ru.nanolive.draconicplus.common.fusioncrafting.IFusionRecipe;
 import ru.nanolive.draconicplus.common.fusioncrafting.OreDictHelper;
 import ru.nanolive.draconicplus.common.fusioncrafting.RecipeManager;
 import ru.nanolive.draconicplus.common.fusioncrafting.Vec3D;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.GlStateManager;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.ResourceHelperDP;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.VertexBuffer;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.effect.GuiEffect;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.effect.GuiEffectRenderer;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.effect.RenderEnergyBolt;
@@ -80,20 +78,20 @@ public class GuiFusionCraftingCore extends GuiContainer {
         if (currentRecipe != null && canCraft != null && canCraft.equals("true")) {
 
             //Ingredients
-            GuiHelper.drawColouredRect(guiLeft + 15, guiTop + 7, 20, 100, 0xFFAA00FF);
-            GuiHelper.drawColouredRect(guiLeft + 16, guiTop + 8, 18, 98, 0xFF000000);
-            GuiHelper.drawColouredRect(guiLeft + xSize - 35, guiTop + 7, 20, 100, 0xFFAA00FF);
-            GuiHelper.drawColouredRect(guiLeft + xSize - 34, guiTop + 8, 18, 98, 0xFF000000);
+        	GuiHelper.drawColouredRect(guiLeft + 15, guiTop + 7, 20, 100, 0xFFAA00FF);
+        	GuiHelper.drawColouredRect(guiLeft + 16, guiTop + 8, 18, 98, 0xFF000000);
+        	GuiHelper.drawColouredRect(guiLeft + xSize - 35, guiTop + 7, 20, 100, 0xFFAA00FF);
+        	GuiHelper.drawColouredRect(guiLeft + xSize - 34, guiTop + 8, 18, 98, 0xFF000000);
 
             //Items
-            GuiHelper.drawColouredRect(guiLeft + (xSize / 2) - 10, guiTop + 24, 20, 64, 0xFF00FFFF);
-            GuiHelper.drawColouredRect(guiLeft + (xSize / 2) - 9, guiTop + 25, 18, 62, 0xFF000000);
+        	GuiHelper.drawColouredRect(guiLeft + (xSize / 2) - 10, guiTop + 24, 20, 64, 0xFF00FFFF);
+        	GuiHelper.drawColouredRect(guiLeft + (xSize / 2) - 9, guiTop + 25, 18, 62, 0xFF000000);
         }
 
         //endregion
 
         drawCenteredString(fontRendererObj, I18n.format("gui.de.fusionCraftingCore.name"), guiLeft + (xSize / 2), guiTop + 5, 0x00FFFF);
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
 
         ResourceHelperDP.bindTexture("textures/gui/fusion_crafting.png");
         //drawTexturedModalRect(guiLeft + (xSize / 2) - 8, guiTop + 45, 0, 0, 15, 21);
@@ -116,7 +114,7 @@ public class GuiFusionCraftingCore extends GuiContainer {
 
             if (tile.isCrafting.value && tile.craftingStage.value > 0) {
 
-                GlStateManager.depthMask(false);
+            	GL11.glDepthMask(false);
                 double charge = tile.craftingStage.value / 1000D;
                 if (charge > 1) {
                     charge = 1;
@@ -309,11 +307,11 @@ public class GuiFusionCraftingCore extends GuiContainer {
                     GuiHelper.drawCenteredString(fontRendererObj, I18n.format("gui.fusionCrafting.outputObstructed.info"), (xSize / 2), 95, 0xAA00FF, false);
                 } else {
 
-                    GlStateManager.translate(0, 0, 600);
+                	GL11.glTranslatef(0, 0, 600);
                     GuiHelper.drawColouredRect(5, 88, xSize - 10, 20, 0xFFFF0000);
                     GuiHelper.drawColouredRect(6, 89, xSize - 12, 18, 0xFF000000);
                     GuiHelper.drawCenteredSplitString(fontRendererObj, I18n.format(canCraft), (xSize / 2), 90, xSize - 10, 0xAA00FF, false);
-                    GlStateManager.translate(0, 0, -600);
+                    GL11.glTranslatef(0, 0, -600);
                 }
             }
         }
@@ -398,7 +396,7 @@ public class GuiFusionCraftingCore extends GuiContainer {
 
     private void drawItemStack(ItemStack stack, int x, int y, String altText)
     {
-        GlStateManager.translate(0.0F, 0.0F, 32.0F);
+    	GL11.glTranslatef(0.0F, 0.0F, 32.0F);
         this.zLevel = 200.0F;
         this.itemRender.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = null;
@@ -478,17 +476,16 @@ public class GuiFusionCraftingCore extends GuiContainer {
             float scale = 8F * this.particleScale;
 
             Tessellator tessellator = Tessellator.instance;
-            VertexBuffer vertexbuffer = tessellator.getBuffer(tessellator);
-            tessellator.startDrawing(0);
-            vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+            tessellator.startDrawingQuads();
 
             float renderX = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks);
             float renderY = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks);
 
-            vertexbuffer.pos((double) (renderX - 1 * scale), (double) (renderY - 1 * scale), 0D).tex((double) maxU, (double) maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).endVertex();
-            vertexbuffer.pos((double) (renderX - 1 * scale), (double) (renderY + 1 * scale), 0D).tex((double) maxU, (double) minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).endVertex();
-            vertexbuffer.pos((double) (renderX + 1 * scale), (double) (renderY + 1 * scale), 0D).tex((double) minU, (double) minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).endVertex();
-            vertexbuffer.pos((double) (renderX + 1 * scale), (double) (renderY - 1 * scale), 0D).tex((double) minU, (double) maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).endVertex();
+            tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+            tessellator.addVertexWithUV((renderX - 1.0F * scale), (renderY - 1.0F * scale), 0.0D, maxU, maxV);
+            tessellator.addVertexWithUV((renderX - 1.0F * scale), (renderY + 1.0F * scale), 0.0D, maxU, maxV);
+            tessellator.addVertexWithUV((renderX + 1.0F * scale), (renderY + 1.0F * scale), 0.0D, maxU, maxV);
+            tessellator.addVertexWithUV((renderX + 1.0F * scale), (renderY - 1.0F * scale), 0.0D, maxU, maxV);
 
             tessellator.draw();
         }

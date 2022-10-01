@@ -2,8 +2,6 @@ package ru.nanolive.draconicplus.common.fusioncrafting.client.render.effect;
 
 import org.lwjgl.opengl.GL11;
 
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.GlStateManager;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,16 +33,16 @@ public class GuiEffectRenderer {
         for (GuiEffect effect : effects){
 
             if (effect.isTransparent()){
-                GlStateManager.enableBlend();
-                GlStateManager.alphaFunc(GL11.GL_GREATER, 0F);
+            	GL11.glEnable(GL11.GL_BLEND);
+                GL11.glAlphaFunc(GL11.GL_GREATER, 0F);
             }
 
-            GlStateManager.disableLighting();
+            GL11.glDisable(GL11.GL_LIGHTING);
 
             effect.renderParticle(partialTick);
 
             if (effect.isTransparent()){
-                GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+            	GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
             }
         }
     }

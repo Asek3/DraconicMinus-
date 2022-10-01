@@ -3,7 +3,6 @@ package ru.nanolive.draconicplus.common.fusioncrafting.client.render.effect;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.VertexBuffer;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.vertex.DefaultVertexFormats;
 
 import org.lwjgl.opengl.GL11;
@@ -121,16 +120,16 @@ public class GuiEffect {
         float scale = 8F * this.particleScale;
 
         Tessellator tessellator = Tessellator.instance;
-        VertexBuffer vertexbuffer = tessellator.getBuffer(tessellator);
-        vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        tessellator.startDrawingQuads();
 
         float renderX = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks);
         float renderY = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks);
 
-        vertexbuffer.pos((double) (renderX - 1 * scale), (double) (renderY - 1 * scale), zLevel).tex((double) maxU, (double) maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).endVertex();
-        vertexbuffer.pos((double) (renderX - 1 * scale), (double) (renderY + 1 * scale), zLevel).tex((double) maxU, (double) minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).endVertex();
-        vertexbuffer.pos((double) (renderX + 1 * scale), (double) (renderY + 1 * scale), zLevel).tex((double) minU, (double) minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).endVertex();
-        vertexbuffer.pos((double) (renderX + 1 * scale), (double) (renderY - 1 * scale), zLevel).tex((double) minU, (double) maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).endVertex();
+        tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        tessellator.addVertexWithUV((renderX - 1.0F * scale), (renderY - 1.0F * scale), this.zLevel, maxU, maxV);
+        tessellator.addVertexWithUV((renderX - 1.0F * scale), (renderY + 1.0F * scale), this.zLevel, maxU, minV);
+        tessellator.addVertexWithUV((renderX + 1.0F * scale), (renderY + 1.0F * scale), this.zLevel, minU, minV);
+        tessellator.addVertexWithUV((renderX + 1.0F * scale), (renderY - 1.0F * scale), this.zLevel, minU, maxV);
 
         tessellator.draw();
     }

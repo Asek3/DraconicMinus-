@@ -61,7 +61,7 @@ public class ForgeHooksClient {
                 break;
             case COLOR:
                 GL11.glDisableClientState(32886);
-                GlStateManager.resetColor();
+                GL11.glColor4f(-1, -1, -1, -1);
                 break;
             case UV:
                 OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit + attr.getIndex());

@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import ru.nanolive.draconicplus.common.fusioncrafting.Vec3D;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.VertexBuffer;
 
 public class DPParticle extends EntityFX {
 
@@ -102,7 +101,6 @@ public class DPParticle extends EntityFX {
 
     @Override
     public void renderParticle(Tessellator tessellator, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-    	VertexBuffer vertexbuffer = tessellator.getBuffer(tessellator);
         float minU = (float) this.particleTextureIndexX / texturesPerRow;
         float maxU = minU + 1F / texturesPerRow;//0.0624375F;
         float minV = (float) this.particleTextureIndexY / texturesPerRow;
@@ -123,10 +121,11 @@ public class DPParticle extends EntityFX {
         int j = brightnessForRender >> 16 & 65535;
         int k = brightnessForRender & 65535;
         
-        vertexbuffer.pos((double) (renderX - rotationX * scale - rotationXY * scale), (double) (renderY - rotationZ * scale), (double) (renderZ - rotationYZ * scale - rotationXZ * scale)).tex((double) maxU, (double) maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        vertexbuffer.pos((double) (renderX - rotationX * scale + rotationXY * scale), (double) (renderY + rotationZ * scale), (double) (renderZ - rotationYZ * scale + rotationXZ * scale)).tex((double) maxU, (double) minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        vertexbuffer.pos((double) (renderX + rotationX * scale + rotationXY * scale), (double) (renderY + rotationZ * scale), (double) (renderZ + rotationYZ * scale + rotationXZ * scale)).tex((double) minU, (double) minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        vertexbuffer.pos((double) (renderX + rotationX * scale - rotationXY * scale), (double) (renderY - rotationZ * scale), (double) (renderZ + rotationYZ * scale - rotationXZ * scale)).tex((double) minU, (double) maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+        tessellator.addVertexWithUV((double) (renderX - rotationX * scale - rotationXY * scale), (double) (renderY - rotationZ * scale), (double) (renderZ - rotationYZ * scale - rotationXZ * scale), (double) maxU, (double) maxV);
+        tessellator.addVertexWithUV((double) (renderX - rotationX * scale + rotationXY * scale), (double) (renderY + rotationZ * scale), (double) (renderZ - rotationYZ * scale + rotationXZ * scale), (double) maxU, (double) minV);
+        tessellator.addVertexWithUV((double) (renderX + rotationX * scale + rotationXY * scale), (double) (renderY + rotationZ * scale), (double) (renderZ + rotationYZ * scale + rotationXZ * scale), (double) minU, (double) minV);
+        tessellator.addVertexWithUV((double) (renderX + rotationX * scale - rotationXY * scale), (double) (renderY - rotationZ * scale), (double) (renderZ + rotationYZ * scale - rotationXZ * scale), (double) minU, (double) maxV);
     }
 	
 }

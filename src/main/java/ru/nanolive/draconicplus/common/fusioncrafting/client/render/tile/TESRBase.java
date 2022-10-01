@@ -1,12 +1,13 @@
 package ru.nanolive.draconicplus.common.fusioncrafting.client.render.tile;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.GlStateManager;
 
 /**
  * Created by brandon3055 on 6/5/2016.
@@ -35,7 +36,7 @@ public class TESRBase<T extends TileEntity> extends TileEntitySpecialRenderer {
             lastBrightnessY = OpenGlHelper.lastBrightnessY;
             isLightSet = true;
         }
-        GlStateManager.disableLighting();
+        GL11.glDisable(GL11.GL_LIGHTING);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, light, light);
     }
 
@@ -44,43 +45,43 @@ public class TESRBase<T extends TileEntity> extends TileEntitySpecialRenderer {
             isLightSet = false;
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
         }
-        GlStateManager.enableLighting();
+        GL11.glEnable(GL11.GL_LIGHTING);
     }
 
     public void translateScaleTranslate(double translate, double x, double y, double z) {
-        GlStateManager.translate(translate, translate, translate);
-        GlStateManager.scale(x, y, z);
-        GlStateManager.translate(-translate, -translate, -translate);
+    	GL11.glTranslated(translate, translate, translate);
+    	GL11.glScaled(x, y, z);
+    	GL11.glTranslated(-translate, -translate, -translate);
     }
 
     public void translateRotateTranslate(double translate, float angle, float x, float y, float z) {
-        GlStateManager.translate(translate, translate, translate);
-        GlStateManager.rotate(angle, x, y, z);
-        GlStateManager.translate(-translate, -translate, -translate);
+    	GL11.glTranslated(translate, translate, translate);
+    	GL11.glRotatef(angle, x, y, z);
+        GL11.glTranslated(-translate, -translate, -translate);
     }
 
     public void preRenderFancy() {
-        GlStateManager.glTexParameteri(3553, 10242, 10497);
-        GlStateManager.glTexParameteri(3553, 10243, 10497);
-        GlStateManager.disableCull();
-        GlStateManager.disableBlend();
-        GlStateManager.depthMask(true);
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+    	GL11.glTexParameteri(3553, 10242, 10497);
+    	GL11.glTexParameteri(3553, 10243, 10497);
+    	GL11.glDisable(GL11.GL_CULL_FACE);
+    	GL11.glDisable(GL11.GL_BLEND);
+        GL11.glDepthMask(true);
+        OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
     }
 
     /**
      * Call before rendering transparent
      */
     public void midRenderFancy() {
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.depthMask(false);
+    	GL11.glEnable(GL11.GL_BLEND);
+    	OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GL11.glDepthMask(false);
     }
 
     public void postRenderFancy() {
-        GlStateManager.enableTexture2D();
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
+    	GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
 

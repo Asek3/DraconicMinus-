@@ -13,9 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import ru.nanolive.draconicplus.client.particles.DPParticle;
 import ru.nanolive.draconicplus.common.fusioncrafting.PairKV;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.GlStateManager;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.ResourceHelperDP;
-import ru.nanolive.draconicplus.common.fusioncrafting.client.render.VertexBuffer;
 import ru.nanolive.draconicplus.common.fusioncrafting.client.render.vertex.DefaultVertexFormats;
 
 import org.lwjgl.opengl.GL11;
@@ -230,9 +228,9 @@ public class DPEffectRenderer {
         EntityFX.interpPosX = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double) partialTicks;
         EntityFX.interpPosY = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double) partialTicks;
         EntityFX.interpPosZ = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double) partialTicks;
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.alphaFunc(516, 0.003921569F);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glAlphaFunc(516, 0.003921569F);
         Tessellator tessellator = Tessellator.instance;
 
         for (int layer = 0; layer < 4; layer++) {
@@ -240,17 +238,15 @@ public class DPEffectRenderer {
             renderTexturedParticlesInLayer(layer, tessellator, entityIn, partialTicks, f, f1, f2, f3, f4);
         }
 
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-        GlStateManager.alphaFunc(516, 0.1F);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glAlphaFunc(516, 0.1F);
     }
 
     private void renderGlParticlesInLayer(int layer, Tessellator tessellator, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        VertexBuffer vertexbuffer = tessellator.getBuffer(tessellator);
-
         for (IGLFXHandler handler : glRenderQueue.keySet()) {
 
-            handler.preDraw(layer, vertexbuffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+            handler.preDraw(layer, tessellator, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 
             for (final EntityFX particle : glRenderQueue.get(handler)[layer]) {
                 try {
@@ -268,7 +264,7 @@ public class DPEffectRenderer {
                 }
             }
 
-            handler.postDraw(layer, vertexbuffer, tessellator);
+            handler.postDraw(layer, tessellator);
         }
     }
 
@@ -284,16 +280,15 @@ public class DPEffectRenderer {
                 if (!texRenderQueue[layer][j].isEmpty()) {
                     switch (j) {
                         case 0:
-                            GlStateManager.depthMask(false);
-                            GlStateManager.alphaFunc(GL11.GL_GREATER, 0F);
+                        	GL11.glDepthMask(false);
+                        	GL11.glAlphaFunc(GL11.GL_GREATER, 0F);
                             break;
                         case 1:
-                            GlStateManager.depthMask(true);
+                        	GL11.glDepthMask(true);
                     }
 
-                    GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                    VertexBuffer vertexbuffer = tessellator.getBuffer(tessellator);
-                    vertexbuffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+                    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                    tessellator.startDrawingQuads();
 
                     for (final EntityFX particle : texRenderQueue[layer][j]) {
                         try {
@@ -315,7 +310,7 @@ public class DPEffectRenderer {
                             throw new ReportedException(crashreport);
                         }
                     }
-                    tessellator.startDrawing(0);
+                    //tessellator.startDrawing(0);
 
                     tessellator.draw();
                 }
@@ -348,14 +343,14 @@ public class DPEffectRenderer {
 
     public static final IGLFXHandler DEFAULT_IGLFX_HANDLER = new IGLFXHandler() {
         @Override
-        public void preDraw(int layer, VertexBuffer vertexbuffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.depthMask(false);
-            GlStateManager.alphaFunc(GL11.GL_GREATER, 0F);
+        public void preDraw(int layer, Tessellator tessellator, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+        	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GL11.glDepthMask(false);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0F);
         }
 
         @Override
-        public void postDraw(int layer, VertexBuffer vertexbuffer, Tessellator tessellator) {
+        public void postDraw(int layer, Tessellator tessellator) {
 
         }
     };
