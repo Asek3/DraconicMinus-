@@ -1,0 +1,22 @@
+itemGroup.draconicplus=DraconicMinus-
+
+//Fusion Crafting
+tile.draconicplus:fusionCraftingCore.name=Fusion Crafting Core
+tile.draconicplus:craftingInjector0.name=Basic Fusion Crafting Injector
+tile.draconicplus:craftingInjector1.name=Wyvern Fusion Crafting Injector
+tile.draconicplus:craftingInjector2.name=Draconic Fusion Crafting Injector
+tile.draconicplus:craftingInjector3.name=Chaotic Fusion Crafting Injector
+
+gui.de.fusionCraftingCore.name=Fusion Crafting
+gui.de.button.start=Start
+gui.fusionCrafting.charging.info=Charging
+gui.fusionCrafting.crafting.info=Crafting
+gui.fusionCrafting.outputObstructed.info=Output Obstructed
+gui.fusionCrafting.tierLow.info=Pedestal Tier Too Low
+info.energyCost.txt=Затраты энергии
+info.tier.txt=Tier
+info.tier0.txt=Basic
+info.tier1.txt=Wyvern
+info.tier2.txt=Draconic
+info.tier3.txt=Chaotic
+crafting.fusioncrafting=Fusion Crafting
