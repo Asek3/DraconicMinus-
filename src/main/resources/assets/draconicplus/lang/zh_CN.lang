@@ -1,22 +1,22 @@
 itemGroup.draconicplus=DraconicMinus-
 
 //Fusion Crafting
-tile.draconicplus:fusionCraftingCore.name=Fusion Crafting Core
-tile.draconicplus:craftingInjector0.name=Basic Fusion Crafting Injector
-tile.draconicplus:craftingInjector1.name=Wyvern Fusion Crafting Injector
-tile.draconicplus:craftingInjector2.name=Draconic Fusion Crafting Injector
-tile.draconicplus:craftingInjector3.name=Chaotic Fusion Crafting Injector
+tile.draconicplus:fusionCraftingCore.name=聚合核心
+tile.draconicplus:craftingInjector0.name=基础聚合注入器
+tile.draconicplus:craftingInjector1.name=飞龙聚合注入器
+tile.draconicplus:craftingInjector2.name=神龙聚合注入器
+tile.draconicplus:craftingInjector3.name=混沌聚合注入器
 
-gui.de.fusionCraftingCore.name=Fusion Crafting
-gui.de.button.start=Start
-gui.fusionCrafting.charging.info=Charging
-gui.fusionCrafting.crafting.info=Crafting
-gui.fusionCrafting.outputObstructed.info=Output Obstructed
-gui.fusionCrafting.tierLow.info=Pedestal Tier Too Low
-info.energyCost.txt=Затраты энергии
-info.tier.txt=Tier
-info.tier0.txt=Basic
-info.tier1.txt=Wyvern
-info.tier2.txt=Draconic
-info.tier3.txt=Chaotic
-crafting.fusioncrafting=Fusion Crafting
+gui.de.fusionCraftingCore.name=聚合合成
+gui.de.button.start=开始
+gui.fusionCrafting.charging.info=充能中
+gui.fusionCrafting.crafting.info=合成中
+gui.fusionCrafting.outputObstructed.info=输入被堵塞
+gui.fusionCrafting.tierLow.info=聚合注入器等级不足
+info.energyCost.txt=能量消耗
+info.tier.txt=等级
+info.tier0.txt=基础
+info.tier1.txt=飞龙
+info.tier2.txt=神龙
+info.tier3.txt=混沌
+crafting.fusioncrafting=聚合合成
